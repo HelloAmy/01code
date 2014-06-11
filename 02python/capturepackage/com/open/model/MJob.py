@@ -1,4 +1,5 @@
 # coding=gbk
+from com.open.model.MCompany import MCompany
 '''
 Created on 2014年6月3日
 
@@ -8,21 +9,12 @@ class MJob:
     #===========================================================================
     # 工作类model
     #===========================================================================
+
+    keyID = ''
+    #主键ID
     
-    companyName = ''
-#     公司名称
-
-    companyIndustry = ''
-#     公司行业
-
-    companyNature = ''
-#     公司性质
-
-    companyScale = ''
-#     公司规模
-
-    companyLink = ''
-#     公司链接
+    company = MCompany()
+    #公司信息
 
     publishDay = ''
 #     发布日期
@@ -42,13 +34,13 @@ class MJob:
     linkUrl = ''
 #     页面链接地址
 
+    remark = ''
+    #备注信息
+
     def GetJSON(self):
         jsonstr = '{'
-        jsonstr = jsonstr + '"companyName":"' + self.companyName + '",'
-        jsonstr = jsonstr + '"companyIndustry":"' + self.companyIndustry + '",'
-        jsonstr = jsonstr + '"companyNature":' + self.companyNature + '",'
-        jsonstr = jsonstr + "companyScale:" + self.companyScale + ","
-        jsonstr = jsonstr + "companyLink:" + self.companyLink + ","
+        jsonstr = jsonstr + "keyID:" + self.keyID + ","
+        jsonstr = jsonstr + "company:" + self.company.parseJson() + ","
         jsonstr = jsonstr + "publishDay:" + self.publishDay + ","
         jsonstr = jsonstr + "workPlace:" + self.workPlace + ","
         jsonstr = jsonstr + "recruitingNumbers:" + self.recruitingNumbers + ","

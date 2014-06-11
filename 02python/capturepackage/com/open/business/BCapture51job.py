@@ -6,6 +6,8 @@ Created on 2014年6月3日
 '''
 import urllib.request
 from com.open.model.MJob import MJob
+from com.open.factory.KeyIDFactory import KeyIDFactory
+from com.open.msqldao.DJob import DJob
 import re
 
 rule_joke = re.compile('<span id=\"text110\">([\w\W]*?)</span>')
@@ -40,8 +42,8 @@ for i in urls:
     htmli = reqi.read().decode('gbk')
     myjob = MJob()
     companyname = rule_companynameinfo.findall(htmli)
-    myjob.companyLink = companyname[0][0]
-    myjob.companyName = companyname[0][1]
+    myjob.company.companyLink = companyname[0][0]
+    myjob.company.companyName = companyname[0][1]
     companyindustry = rule_companyindustry.findall(htmli)
     companyindustry[0] = companyindustry[0].replace('&nbsp;&nbsp;',';')
     companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司性质：</strong>;',';')
@@ -49,9 +51,9 @@ for i in urls:
     companyindustry[0] = companyindustry[0].replace('</td><td','')
     tempStr = companyindustry[0].split(';')
     if (len(tempStr) >= 4):
-        myjob.companyIndustry = tempStr[0] + '/' + tempStr[1]
-        myjob.companyNature = tempStr[2]
-        myjob.companyScale = tempStr[3]
+        myjob.company.companyIndustry = tempStr[0] + '/' + tempStr[1]
+        myjob.company.companyNature = tempStr[2]
+        myjob.company.companyScale = tempStr[3]
         
     myjob.publishDay = rule_publishtime.findall(htmli)[0]
     
@@ -64,11 +66,18 @@ for i in urls:
         myjob.joblabel = rule_joblabel.findall(htmli)[0].replace('&nbsp;', '') 
 
     if len(rule_jobdescription.findall(htmli)) > 0:
-        myjob.jobDescription = rule_jobdescription.findall(htmli)[0]
+        tempstr = rule_jobdescription.findall(htmli)[0]
+        myjob.jobDescription = tempstr
+        
     myjob.linkUrl = i
+    keyIdFactory = KeyIDFactory("amydb", "job")
+    myjob.keyID = keyIdFactory.CreateKeyID()
+    
+    dao = DJob(myjob)
+    dao.insertJob()
     
     print(myjob.GetJSON())
-    jobList.append(myjob)
+    #jobList.append(myjob)
     break
 
 
