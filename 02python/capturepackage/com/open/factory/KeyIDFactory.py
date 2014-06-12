@@ -6,6 +6,7 @@ Created on 2014Äê6ÔÂ11ÈÕ
 '''
 from time import gmtime, strftime, time
 import hashlib
+import datetime
 
 class KeyIDFactory(object):
     '''
@@ -29,5 +30,5 @@ class KeyIDFactory(object):
         h = hashlib.md5()
         data = self.databaseName + self.tableName;
         h.update(data.encode("gb2312"))
-        return strftime("%Y%m%d%H%M%S",gmtime(time()+28800)) + h.hexdigest()[0:11]
+        return strftime("%Y%m%d%H%M%S",gmtime(time()+28800)) + h.hexdigest()[0:11] + datetime.datetime.now().microsecond.__str__()
         
