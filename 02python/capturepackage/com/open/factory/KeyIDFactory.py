@@ -4,7 +4,6 @@ Created on 2014Äê6ÔÂ11ÈÕ
 
 @author: zhujinrong
 '''
-from time import gmtime, strftime, time
 import hashlib
 import datetime
 
@@ -30,5 +29,5 @@ class KeyIDFactory(object):
         h = hashlib.md5()
         data = self.databaseName + self.tableName;
         h.update(data.encode("gb2312"))
-        return strftime("%Y%m%d%H%M%S",gmtime(time()+28800)) + h.hexdigest()[0:11] + datetime.datetime.now().microsecond.__str__()
+        return datetime.datetime.today().__format__("%Y%m%d%H%M%S%f") + h.hexdigest()[0:11]
         

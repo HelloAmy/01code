@@ -43,7 +43,7 @@ class MJob:
         jsonstr = jsonstr + "company:" + self.company.parseJson() + ","
         jsonstr = jsonstr + "publishDay:" + self.publishDay + ","
         jsonstr = jsonstr + "workPlace:" + self.workPlace + ","
-        jsonstr = jsonstr + "recruitingNumbers:" + self.recruitingNumbers + ","
+        jsonstr = jsonstr + "recruitingNumbers:" + self.recruitingNumbers.__str__() + ","
         jsonstr = jsonstr + "joblabel:" + self.joblabel + ","
         jsonstr = jsonstr + "jobDescription:" + self.jobDescription + ","
         jsonstr = jsonstr + "linkUrl:" + self.linkUrl

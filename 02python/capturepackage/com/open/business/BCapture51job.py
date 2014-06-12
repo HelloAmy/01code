@@ -5,9 +5,10 @@ Created on 2014年6月3日
 @author: zhujinrong
 '''
 import urllib.request
+import mysql.connector
+import datetime
 from com.open.model.MJob import MJob
-from com.open.factory.KeyIDFactory import KeyIDFactory
-from com.open.msqldao.DJob import DJob
+from com.open.business.BJob import BJob
 import re
 
 rule_joke = re.compile('<span id=\"text110\">([\w\W]*?)</span>')
@@ -29,8 +30,9 @@ url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,%25C8%25ED%2
 req=urllib.request.urlopen(url)
 html = req.read().decode('gbk')
 urls = rule_url.findall(html)
-f = open('zhaopin.txt','w')
-
+fileName = datetime.datetime.today().__format__("%Y%m%d") + "log51job.txt"
+f = open(fileName,'w')
+f.truncate()
 jobList = list()
 
 for i in urls:
@@ -45,22 +47,29 @@ for i in urls:
     myjob.company.companyLink = companyname[0][0]
     myjob.company.companyName = companyname[0][1]
     companyindustry = rule_companyindustry.findall(htmli)
-    companyindustry[0] = companyindustry[0].replace('&nbsp;&nbsp;',';')
-    companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司性质：</strong>;',';')
-    companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司规模：</strong>;',';')
-    companyindustry[0] = companyindustry[0].replace('</td><td','')
-    tempStr = companyindustry[0].split(';')
-    if (len(tempStr) >= 4):
-        myjob.company.companyIndustry = tempStr[0] + '/' + tempStr[1]
-        myjob.company.companyNature = tempStr[2]
-        myjob.company.companyScale = tempStr[3]
+    if len(companyindustry) > 0:
+        companyindustry[0] = companyindustry[0].replace('&nbsp;&nbsp;',';')
+        companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司性质：</strong>;',';')
+        companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司规模：</strong>;',';')
+        companyindustry[0] = companyindustry[0].replace('</td><td','')
+        tempStr = companyindustry[0].split(';')
+        if (len(tempStr) >= 4):
+            myjob.company.companyIndustry = tempStr[0] + '/' + tempStr[1]
+            myjob.company.companyNature = tempStr[2]
+            if not tempStr[3].strip():
+                myjob.company.companyScale = tempStr[3]
         
     myjob.publishDay = rule_publishtime.findall(htmli)[0]
     
     myjob.workPlace = rule_workplace.findall(htmli)[0]
     
     if len(rule_recruitingNumbers.findall(htmli)) > 0:
-        myjob.recruitingNumbers = rule_recruitingNumbers.findall(htmli)[0]
+        if not rule_recruitingNumbers.findall(htmli)[0].strip():
+            myjob.recruitingNumbers = rule_recruitingNumbers.findall(htmli)[0]
+        else:
+            myjob.recruitingNumbers = 0
+    else:
+        myjob.recruitingNumbers = 0
 
     if len(rule_joblabel.findall(htmli)) > 0:
         myjob.joblabel = rule_joblabel.findall(htmli)[0].replace('&nbsp;', '') 
@@ -70,15 +79,16 @@ for i in urls:
         myjob.jobDescription = tempstr
         
     myjob.linkUrl = i
-    keyIdFactory = KeyIDFactory("amydb", "job")
-    myjob.keyID = keyIdFactory.CreateKeyID()
-    
-    dao = DJob(myjob)
-    dao.insertJob()
-    
+    try:
+        bll = BJob()
+        bll.insert_job(myjob)
+    except mysql.connector.Error as err:
+        print("error:" + err.msg)
+    f.write("【" + datetime.datetime.today().__str__()+ "】:" + myjob.GetJSON() + "\r\n")
     print(myjob.GetJSON())
     #jobList.append(myjob)
-    break
+    #break
 
+f.close()
 
 

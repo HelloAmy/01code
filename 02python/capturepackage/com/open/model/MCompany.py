@@ -22,7 +22,7 @@ class MCompany(object):
     companyNature = ''
     # 公司性质
     
-    companyScale = 0
+    companyScale = ''
     # 公司规模
     
     companyLink = ''
