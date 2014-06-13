@@ -25,14 +25,22 @@ rule_joblabel = re.compile('<strong>职位标签:</strong>(\S*)')
 rule_jobdescription = re.compile('<strong>职位描述:</strong>([\s\S]*)</div></td>')
 
 mainUrl = 'http://search.51job.com'
-url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,%25C8%25ED%25BC%25FE,2,%2B.html?lang=c&stype=1&image_x=0&image_y=0&specialarea=00'
+
+# 软件工程师
+#url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,%25C8%25ED%25BC%25FE,2,%2B.html?lang=c&stype=1&image_x=0&image_y=0&specialarea=00' 
+
+# java
+#url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,java,2,%2B.html?lang=c&stype=1&image_x=34&image_y=21&specialarea=00'
+
+# j2ee
+url='http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=090200&funtype=0000&industrytype=00&keyword=j2ee&keywordtype=2&lang=c&stype=1&postchannel=0000&fromType=1'
 
 req=urllib.request.urlopen(url)
 html = req.read().decode('gbk')
 urls = rule_url.findall(html)
-fileName = datetime.datetime.today().__format__("%Y%m%d") + "log51job.txt"
+fileName = datetime.datetime.today().__format__("%Y%m%d%H%M%S") + "log51job.txt"
 f = open(fileName,'w')
-f.truncate()
+#f.truncate()
 jobList = list()
 
 for i in urls:
