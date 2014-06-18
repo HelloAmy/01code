@@ -30,10 +30,10 @@ mainUrl = 'http://search.51job.com'
 #url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,%25C8%25ED%25BC%25FE,2,%2B.html?lang=c&stype=1&image_x=0&image_y=0&specialarea=00' 
 
 # java
-#url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,java,2,%2B.html?lang=c&stype=1&image_x=34&image_y=21&specialarea=00'
+url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,java,2,%2B.html?lang=c&stype=1&image_x=34&image_y=21&specialarea=00'
 
 # j2ee
-url='http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=090200&funtype=0000&industrytype=00&keyword=j2ee&keywordtype=2&lang=c&stype=1&postchannel=0000&fromType=1'
+#url='http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=090200&funtype=0000&industrytype=00&keyword=j2ee&keywordtype=2&lang=c&stype=1&postchannel=0000&fromType=1'
 
 req=urllib.request.urlopen(url)
 html = req.read().decode('gbk')
@@ -61,11 +61,16 @@ for i in urls:
         companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司规模：</strong>;',';')
         companyindustry[0] = companyindustry[0].replace('</td><td','')
         tempStr = companyindustry[0].split(';')
+        print(tempStr)
+        if (len(tempStr) >= 3):
+            myjob.company.companyIndustry = tempStr[0]
+            myjob.company.companyNature = tempStr[1]
+            myjob.company.companyScale = tempStr[2]
+        
         if (len(tempStr) >= 4):
             myjob.company.companyIndustry = tempStr[0] + '/' + tempStr[1]
             myjob.company.companyNature = tempStr[2]
-            if not tempStr[3].strip():
-                myjob.company.companyScale = tempStr[3]
+            myjob.company.companyScale = tempStr[3]
         
     myjob.publishDay = rule_publishtime.findall(htmli)[0]
     
