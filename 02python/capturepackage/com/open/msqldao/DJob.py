@@ -6,6 +6,7 @@ Created on 2014年6月11日
 '''
 
 from time import gmtime, strftime, time
+from com.open.model.MJob import MJob
 
 class DJob(object):
     '''
@@ -16,6 +17,31 @@ class DJob(object):
         '''
         Constructor
         '''
+    
+    def get_job_byLinkUrl(self,conn, job):
+        '''
+            根据KeyID查询JobInfo
+        '''
+        ret = MJob()
+        tableName = "job" + job.KeyID.substr(0, 6)
+        sql_get_job = "SELECT KeyID,CompanyID, PublishDay, WorkPlace, RecuitingNumbers, JobLabel, JobDescription, LinkUrl, Remark,IsDelete"
+        sql_get_job += " FROM " + tableName
+        sql_get_job += " WHERE LinkUrl = '" + job.LinkUrl + "' AND IsDelete = 0 LIMIT 1"
+        cursor = conn.cursor()
+        cursor.execute(sql_get_job)
+        for(KeyID,CompanyID, PublishDay, WorkPlace, RecuitingNumbers, JobLabel, JobDescription, LinkUrl, Remark,IsDelete) in cursor:
+            ret.KeyID = KeyID
+            ret.CompanyID = CompanyID
+            ret.PublishDay = PublishDay
+            ret.WorkPlace = WorkPlace
+            ret.RecuitingNumbers = RecuitingNumbers
+            ret.JobLabel = JobLabel
+            ret.JobDescription = JobDescription
+            ret.LinkUrl = LinkUrl
+            ret.Remark = Remark
+            ret.IsDelete = IsDelete
+        cursor.close()
+        return ret
     
     def insertJob(self, conn, job):
         '''
@@ -42,4 +68,15 @@ class DJob(object):
         cursor = conn.cursor()
         cursor.execute(sql_insertjob, data)
         cursor.close()
-        
+    def update_job(self,conn, job):
+        '''
+        根据keyID更新Job表的Remark字段
+        '''
+        tableName = "job" + job.KeyID.substr(0, 6)
+        sql_update_job = "UPDATE " + tableName
+        sql_update_job += " SET Remark ='" + job.Remark + "'"
+        sql_update_job += " WHERE KeyID = '" + job.KeyID + "' AND IsDelete = 0 LIMIT 1"
+        cursor = conn.cursor()
+        ret = cursor.execute(sql_update_job)
+        cursor.close()
+        return ret

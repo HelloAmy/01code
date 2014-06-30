@@ -44,7 +44,21 @@ class BJob(object):
         conn.commit()
         conn.close()
         
-            
+    def get_job(self, job):
+        conn = self.connectionFactory.getConnection()
+        temp_job = self.jobDao.get_job(conn, job)
+        conn.commit()
+        conn.close()
+        return temp_job
+    
+    def update_job_remark(self, job):
+        conn = self.connectionFactory.getConnection()
+        self.jobDao.update_job(conn, job)
+        conn.commit()
+        conn.close()
+        
+    
+        
         
         
         

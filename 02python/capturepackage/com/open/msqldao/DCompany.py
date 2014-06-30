@@ -6,7 +6,6 @@ Created on 2014年6月11日
 '''
 
 from com.open.model.MCompany import MCompany
-import mysql.connector
 
 class DCompany(object):
     '''
@@ -19,11 +18,14 @@ class DCompany(object):
         '''
     
     def get_company(self, conn, company):
+        '''
+            根据KeyID获取Company信息
+        '''
         ret = MCompany()
         cursor = conn.cursor()
         sql_query = "SELECT KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete"
         sql_query += " FROM company"
-        sql_query += " WHERE IsDelete = 0 && CompanyName = %s "
+        sql_query += " WHERE IsDelete = 0 && CompanyName = %s LIMIT 1"
         cursor.execute(sql_query, (company.companyName,))
         for(KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete) in cursor:
             ret.keyID = KeyID
@@ -38,6 +40,10 @@ class DCompany(object):
         return ret
     
     def insert_company(self, conn, company):
+        '''
+        插入company信息
+        '''
+        
         sql_insert_company = "INSERT INTO company(KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark)"
         sql_insert_company += " SELECT %(KeyID)s, %(CompanyName)s, %(CompanyIndustry)s, %(CompanyNature)s, %(CompanyScale)s, %(CompanyLink)s, %(Remark)s"
         sql_insert_company += " FROM DUAL"
@@ -56,6 +62,20 @@ class DCompany(object):
         
         cursor = conn.cursor()
         return cursor.execute(sql_insert_company, data)
+    
+    def update_company(self, conn, company):
+        '''
+            修改company表的remark字段
+        '''
+        sql_update_company = "UPDATE company"
+        sql_update_company += " SET Remark='" + company.Remark + "'"
+        sql_update_company += " WHERE KeyID = '" + company.KeyID + "' AND IsDelete = 0 AND LIMIT 1"
+        cursor = conn.cursor
+        ret = cursor.execute(sql_update_company)
+        cursor.close() 
+        return ret
+        
+        
         
         
         

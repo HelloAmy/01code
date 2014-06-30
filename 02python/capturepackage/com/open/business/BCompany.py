@@ -28,6 +28,9 @@ class BCompany(object):
         conn.close()
         return ret
     
-    
-    
- 
+    def update_company_remark(self,company):
+        conn = self.connectionFactory.getConnection()
+        ret = self.dao.update_company(conn, company)
+        conn.commit()
+        conn.close()
+        return ret

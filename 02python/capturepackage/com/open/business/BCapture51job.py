@@ -61,7 +61,6 @@ for i in urls:
         companyindustry[0] = companyindustry[0].replace('<br><br><strong>公司规模：</strong>;',';')
         companyindustry[0] = companyindustry[0].replace('</td><td','')
         tempStr = companyindustry[0].split(';')
-        print(tempStr)
         if (len(tempStr) >= 3):
             myjob.company.companyIndustry = tempStr[0]
             myjob.company.companyNature = tempStr[1]
