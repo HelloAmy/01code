@@ -36,6 +36,9 @@ class MJob:
 
     remark = ''
     #备注信息
+    
+    modifyTime = ''
+    #修改时间
 
     def GetJSON(self):
         jsonstr = '{'
@@ -46,6 +49,7 @@ class MJob:
         jsonstr = jsonstr + "recruitingNumbers:" + self.recruitingNumbers.__str__() + ","
         jsonstr = jsonstr + "joblabel:" + self.joblabel + ","
         jsonstr = jsonstr + "jobDescription:" + self.jobDescription + ","
-        jsonstr = jsonstr + "linkUrl:" + self.linkUrl
+        jsonstr = jsonstr + "linkUrl:" + self.linkUrl + ","
+        jsonstr = jsonstr + "modifyTime:" + self.modifyTime
         jsonstr = jsonstr + '}'
         return jsonstr  

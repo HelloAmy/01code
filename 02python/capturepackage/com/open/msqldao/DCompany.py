@@ -23,11 +23,11 @@ class DCompany(object):
         '''
         ret = MCompany()
         cursor = conn.cursor()
-        sql_query = "SELECT KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete"
+        sql_query = "SELECT KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete, ModifyTime"
         sql_query += " FROM company"
         sql_query += " WHERE IsDelete = 0 && CompanyName = %s LIMIT 1"
         cursor.execute(sql_query, (company.companyName,))
-        for(KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete) in cursor:
+        for(KeyID, CompanyName, CompanyIndustry, CompanyNature, CompanyScale, CompanyLink, Remark, IsDelete, ModifyTime) in cursor:
             ret.keyID = KeyID
             ret.companyName = CompanyName
             ret.companyIndustry = CompanyIndustry
@@ -36,6 +36,7 @@ class DCompany(object):
             ret.companyLink = CompanyLink
             ret.remark = Remark
             ret.isDelete = IsDelete
+            ret.modifyTime = ModifyTime
         cursor.close()
         return ret
     
@@ -68,9 +69,9 @@ class DCompany(object):
             ÐÞ¸Äcompany±íµÄremark×Ö¶Î
         '''
         sql_update_company = "UPDATE company"
-        sql_update_company += " SET Remark='" + company.Remark + "'"
-        sql_update_company += " WHERE KeyID = '" + company.KeyID + "' AND IsDelete = 0 AND LIMIT 1"
-        cursor = conn.cursor
+        sql_update_company += " SET Remark='" + company.remark + "'"
+        sql_update_company += " WHERE KeyID = '" + company.keyID + "' AND IsDelete = 0 LIMIT 1"
+        cursor = conn.cursor()
         ret = cursor.execute(sql_update_company)
         cursor.close() 
         return ret

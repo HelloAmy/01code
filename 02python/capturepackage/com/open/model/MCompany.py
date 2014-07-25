@@ -33,6 +33,9 @@ class MCompany(object):
     
     isDelete= 0
     #是否删除
+    
+    modifyTime = ''
+    #修改时间
 
     def parseJson(self):
         jsonstr = '{';
@@ -43,7 +46,8 @@ class MCompany(object):
         jsonstr = jsonstr + "companyScale:" + self.companyScale + ","
         jsonstr = jsonstr + "companyLink:" + self.companyLink + ","
         jsonstr = jsonstr + "remark:" + self.remark + ","
-        jsonstr = jsonstr + "isDelete:" + self.isDelete.__str__()
+        jsonstr = jsonstr + "isDelete:" + self.isDelete.__str__() + ","
+        jsonstr = jsonstr + "ModifyTime:" + self.modifyTime
         jsonstr = jsonstr + '}'
         return jsonstr
         
