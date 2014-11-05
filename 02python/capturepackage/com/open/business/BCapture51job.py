@@ -30,10 +30,10 @@ mainUrl = 'http://search.51job.com'
 #url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,%25C8%25ED%25BC%25FE,2,%2B.html?lang=c&stype=1&image_x=0&image_y=0&specialarea=00' 
 
 # java
-url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,java,2,%2B.html?lang=c&stype=1&image_x=34&image_y=21&specialarea=00'
+#url='http://search.51job.com/list/090200%252C00,%2B,%2B,%2B,%2B,%2B,java,2,%2B.html?lang=c&stype=1&image_x=34&image_y=21&specialarea=00'
 
 # j2ee
-#url='http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=090200&funtype=0000&industrytype=00&keyword=j2ee&keywordtype=2&lang=c&stype=1&postchannel=0000&fromType=1'
+url='http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=090200&funtype=0000&industrytype=00&keyword=j2ee&keywordtype=2&lang=c&stype=1&postchannel=0000&fromType=1'
 
 req=urllib.request.urlopen(url)
 html = req.read().decode('gbk')
